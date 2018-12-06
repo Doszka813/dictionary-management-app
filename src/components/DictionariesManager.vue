@@ -7,12 +7,11 @@
       </v-tab>
       <v-tab-item v-for="(dictionary, index) in dictionaries" :key="index" ripple>
         <v-card flat>
-          <v-card-text>
+          <v-card-text id="card">
             <h2>
-              <router-link to="/dictionary/:id">{{dictionary.name.toUpperCase() }}</router-link>
+              <router-link to="/dictionary/:id">{{ dictionary.name.toUpperCase() }}</router-link>
             </h2>
-            <DictionaryView/>
-            <!-- <table>
+            <table>
               <tr>
                 <th>
                 </th>
@@ -28,7 +27,8 @@
                 <td>{{pair.domain}}</td>
                 <td>{{pair.range}}</td>
               </tr>
-            </table> -->
+            </table>
+            <v-btn color="error" @click="deleteDictionary">Delete</v-btn>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -38,17 +38,18 @@
 
 <script>
 import { dictionaries } from './dictionaries'
-import { DictionaryView } from './DictionaryView.vue'
 
 export default {
   name: 'DictionariesManager',
-  components: {
-    DictionaryView
-  },
   data() {
     return {
       title: 'Available Dictionaries',
       dictionaries: dictionaries
+    }
+  },
+  methods: {
+    deleteDictionary() {
+    
     }
   }
 }
@@ -61,11 +62,12 @@ h1 {
 
 table {
   margin: 40px auto;
+  border-collapse: collapse;
 }
 
-td {
+tr {
   text-align: left;
-  border-bottom: 1px dotted gray;
+  border-bottom: 1px solid white;
 }
 
 th, td {
@@ -75,5 +77,10 @@ th, td {
 
 a {
   text-decoration: none;
+}
+
+#card {
+  width: 700px;
+  margin: 0 auto;
 }
 </style>

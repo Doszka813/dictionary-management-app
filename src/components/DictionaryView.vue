@@ -1,5 +1,6 @@
 <template>
   <div class="dictionary">
+    <h1>{{dictionaries[id].name}}</h1>
     <table>
       <tr>
         <th>
@@ -11,7 +12,7 @@
           <h2>Range</h2>
         </th>
       </tr>
-      <tr v-for="(pair, index) in dictionaries[index].pairs" :key="index">
+      <tr v-for="(pair, index) in dictionaries[id].pairs" :key="index">
         <td>{{index+1}}</td>
         <td>{{pair.domain}}</td>
         <td>{{pair.range}}</td>
@@ -32,12 +33,12 @@
     name: 'DictionaryView',
     data() {
       return {
+        dictionaries: dictionaries,
         id: this.$route.params.id,
-        dictionaries: dictionaries
+        // dictionary: dictionaris[id],
       }
     },
     methods: {
-
     }
   }
 
@@ -49,12 +50,13 @@ h1 {
 }
 
 table {
-  margin: 30px auto;
+  margin: 40px auto;
+  border-collapse: collapse;
 }
 
 td {
   text-align: left;
-  border-bottom: 1px dotted white;
+  border-bottom: 1px solid white;
 }
 
 th, td {
