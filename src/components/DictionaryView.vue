@@ -27,21 +27,17 @@
 </template>
 
 <script>
-  import { dictionaries } from './dictionaries'
+import { dictionaries } from './dictionaries'
 
-  export default {
-    name: 'DictionaryView',
-    data() {
-      return {
-        dictionaries: dictionaries,
-        id: this.$route.params.id,
-        // dictionary: dictionaris[id],
-      }
-    },
-    methods: {
+export default {
+  name: 'DictionaryView',
+  data() {
+    return {
+      dictionaries: dictionaries,
+      id: this.$route.params.id,
     }
-  }
-
+  },
+}
 </script>
 
 <style scoped>
@@ -62,6 +58,10 @@ td {
 th, td {
   padding: 0 40px;
   padding-top: 15px;
+}
+
+a {
+  text-decoration: none;
 }
 
 </style>

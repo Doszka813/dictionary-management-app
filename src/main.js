@@ -5,9 +5,11 @@ import App from './App'
 import router from './router'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+import VeeValidate from 'vee-validate'
 
 Vue.use(Vuetify)
 Vue.config.productionTip = false
+Vue.use(VeeValidate)
 
 /*eslint no-new: "error"*/ 
 

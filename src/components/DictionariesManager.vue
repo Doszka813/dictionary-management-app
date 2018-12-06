@@ -1,6 +1,13 @@
 <template>
   <div>
-    <h1>{{title}}</h1>
+    <h1>{{title}}
+      <v-badge id="counter" color="blue" left overlap>
+        <span slot="badge" dark medium>{{dictionaries.length}}</span>
+        <v-icon color="grey lighten-1" large>
+          library_books
+        </v-icon>
+      </v-badge>
+    </h1>
     <v-tabs v-model="active" color="gray" dark slider-color="blue">
       <v-tab v-for="(dictionary, index) in dictionaries" :key="index" ripple>
         {{ dictionary.name }}
@@ -9,7 +16,7 @@
         <v-card flat>
           <v-card-text id="card">
             <h2>
-              <router-link to="/dictionary/:id">{{ dictionary.name.toUpperCase() }}</router-link>
+              <router-link :to="{path: '/dictionary/' + dictionary.id }">{{ dictionary.name.toUpperCase() }}</router-link>
             </h2>
             <table>
               <tr>
@@ -28,7 +35,8 @@
                 <td>{{pair.range}}</td>
               </tr>
             </table>
-            <v-btn color="error" @click="deleteDictionary">Delete</v-btn>
+            <v-btn color="error" @click="removeDictionary(index)">Delete</v-btn>
+            <v-btn color="warning" @click="editDictionary(index)">Edit</v-btn>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -44,18 +52,26 @@ export default {
   data() {
     return {
       title: 'Available Dictionaries',
-      dictionaries: dictionaries
+      dictionaries: dictionaries,
+      id: ''
     }
   },
   methods: {
-    deleteDictionary() {
-    
+    removeDictionary(id) {
+      this.dictionaries.splice(id, 1);
+    },
+    editDictionary(id) {
+      this.$router.push('/dictionary/${id}');
     }
   }
 }
+
 </script>
 
 <style scoped>
+#counter {
+  float: right;
+}
 h1 {
   padding: 30px;
 }
@@ -75,9 +91,9 @@ th, td {
   padding-top: 15px;
 }
 
-a {
+/* a {
   text-decoration: none;
-}
+} */
 
 #card {
   width: 700px;
