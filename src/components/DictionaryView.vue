@@ -11,17 +11,27 @@
         <th>
           <h2>Range</h2>
         </th>
+        <th></th>
       </tr>
       <tr v-for="(pair, index) in dictionaries[id].pairs" :key="index">
         <td>{{index+1}}</td>
         <td>{{pair.domain}}</td>
         <td>{{pair.range}}</td>
+        <td @click="removePair(index)">
+          <v-icon dark>delete</v-icon>
+        </td>
+        <td @click="editPair(index)">
+          <v-icon>edit</v-icon>
+        </td>
       </tr>
     </table>
+    <v-btn color="blue darken-2" dark>
+      <v-icon dark left>add</v-icon>Add row</v-btn>
+    <br>
+    <br>
     <router-link to="/dictionaries">
-      <v-btn color="blue darken-2" dark>
-        <v-icon dark left>arrow_back</v-icon>Back
-      </v-btn>
+      <v-btn color="warning darken-1" dark>
+        <v-icon left>arrow_back</v-icon>Back</v-btn>
     </router-link>
   </div>
 </template>
@@ -37,6 +47,11 @@ export default {
       id: this.$route.params.id,
     }
   },
+  methods: {
+    removePair(index) {
+      this.dictionaries[this.id].pairs.splice(index, 1);
+    }
+  }
 }
 </script>
 
@@ -46,6 +61,7 @@ h1 {
 }
 
 table {
+  font-size: 20px;
   margin: 40px auto;
   border-collapse: collapse;
 }

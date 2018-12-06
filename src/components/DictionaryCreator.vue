@@ -8,7 +8,7 @@
       <v-btn color="primary" :disabled="!valid" @click="submitName">Create</v-btn>
       <v-btn color="error" @click="clear">Clear</v-btn>
       <router-link to="/dictionaries">
-        <v-btn color="warning"><v-icon>arrow_back</v-icon>Back</v-btn>
+        <v-btn color="warning" darken-1><v-icon>arrow_back</v-icon>Back</v-btn>
       </router-link>
     </v-form>
     <v-form v-if="isNameAdded" ref="form" lazy-validation>
@@ -21,7 +21,7 @@
       <br>
       <v-btn color="primary" :disabled="!valid" @click="submit">Submit</v-btn>
       <v-btn color="error" @click="clear">Clear</v-btn>
-      <v-btn color="warning"><v-icon>arrow_back</v-icon>Back</v-btn>
+      <v-btn color="warning" darken-1 @click="isNameAdded = !isNameAdded"><v-icon>arrow_back</v-icon>Back</v-btn>
       <br>
       <br>
       <div id="preview" v-if="dictionary.pairs.length>0">
@@ -55,6 +55,7 @@ export default {
     return {
       dictionaries: dictionaries,
       dictionary: {
+        id: dictionaries.length,
         name: '',
         pairs: []
       },

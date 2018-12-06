@@ -37,7 +37,7 @@
             </table>
             <v-btn color="error" @click="removeDictionary(index)">Delete</v-btn>
             <router-link :to="{path: '/dictionary/' + dictionary.id }">
-              <v-btn color="warning">Edit</v-btn>
+              <v-btn color="dark">Edit</v-btn>
             </router-link>
           </v-card-text>
         </v-card>
@@ -75,6 +75,7 @@ h1 {
 }
 
 table {
+  font-size: 20px;
   margin: 40px auto;
   border-collapse: collapse;
 }
