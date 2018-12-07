@@ -68,8 +68,9 @@ export default {
 
 <style scoped>
 #counter {
-  float: right;
+  margin-left: 15px;
 }
+
 h1 {
   padding: 30px;
 }

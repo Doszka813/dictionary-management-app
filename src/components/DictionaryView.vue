@@ -1,6 +1,16 @@
 <template>
   <div class="dictionary">
-    <h1>{{dictionaries[id].name}}</h1>
+    <h1 id="dictionaryName" :class="{'active': editName}">{{dictionaries[id].name}}<v-icon @click="editName = !editName"
+        id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon>
+    </h1>
+    <v-form v-if="editName">
+      <v-text-field class="form" @keyup.enter="submit" v-model.trim="dictionaries[id].name" :counter="20" label="Edit Name"
+        v-validate="'required | min:4 | max:20 '">
+      </v-text-field>
+      <span>
+        <v-icon @click="editName = !editName">done_outline</v-icon>
+      </span>
+    </v-form>
     <table>
       <tr>
         <th>
@@ -12,16 +22,27 @@
           <h2>Range</h2>
         </th>
         <th></th>
+        <th></th>
       </tr>
       <tr v-for="(pair, index) in dictionaries[id].pairs" :key="index">
         <td>{{index+1}}</td>
-        <td>{{pair.domain}}</td>
-        <td>{{pair.range}}</td>
+        <td :class="{'active': editPairs}">{{pair.domain}}
+          <br>
+          <v-form v-if="editPairs" class="editForm">
+            <v-text-field v-model.trim="pair.domain" required></v-text-field>
+          </v-form>
+        </td>
+        <td :class="{'active': editPairs}">{{pair.range}}
+          <br>
+          <v-form v-if="editPairs" class="editForm">
+            <v-text-field v-model.trim="pair.range" required></v-text-field>
+          </v-form>
+        </td>
         <td @click="editPair(index)">
-          <v-icon>edit</v-icon>
+          <v-icon :class="{'active': editName, 'inactive': !editName}" >edit</v-icon>
         </td>
         <td @click="removePair(index)">
-          <v-icon dark>delete</v-icon>
+          <v-icon dark>clear</v-icon>
         </td>
       </tr>
     </table>
@@ -37,12 +58,14 @@
     </v-form>
     <br>
     <v-btn v-if="!addNewPair" @click="addNewPair = !addNewPair" color="blue darken-2" dark>
-      <v-icon dark left>add</v-icon>Add row</v-btn>
+      <v-icon dark left>add</v-icon>Add row
+    </v-btn>
     <br>
     <br>
     <router-link to="/dictionaries">
       <v-btn>
-        <v-icon left>arrow_back</v-icon>Back</v-btn>
+        <v-icon left>arrow_back</v-icon>Back
+      </v-btn>
     </router-link>
   </div>
 </template>
@@ -57,6 +80,8 @@ export default {
       dictionaries: dictionaries,
       id: this.$route.params.id,
       addNewPair: false,
+      editName: false,
+      editPairs: false,
       pair: {
         domain: '',
         range: ''
@@ -66,6 +91,9 @@ export default {
   methods: {
     removePair(index) {
       this.dictionaries[this.id].pairs.splice(index, 1);
+    },
+    editPair(index) {
+      this.editPairs = !this.editPairs;
     },
     addPair() {
       this.$validator.validateAll().then((result) => {
@@ -84,14 +112,21 @@ h1 {
   margin-top: 30px;
 }
 
+#icon {
+  font-size: 20px;
+  position: relative;
+  top: -10px;
+  left: 10px;
+}
+
 table {
   font-size: 20px;
+  text-align: left;
   margin: 40px auto;
   border-collapse: collapse;
 }
 
 td {
-  text-align: left;
   border-bottom: 1px solid white;
 }
 
@@ -109,5 +144,14 @@ a {
   width: 600px;
 }
 
+.editForm {
+  
+}
+.active {
+  color: gray;
+}
 
+.inactive {
+  color: rgb(67, 121, 139);
+}
 </style>

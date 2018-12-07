@@ -2,7 +2,7 @@
   <div class="forms">
     <h3>{{dictionary.name}}</h3>
     <v-form v-if="!isNameAdded" ref="form" v-model="valid" lazy-validation>
-      <v-text-field v-model.trim="dictionary.name" :counter="20" label="Name" required>
+      <v-text-field v-model.trim="dictionary.name" :counter="20" label="Name" v-validate="'required | min:4 | max:20 '">
       </v-text-field>
       <br>
       <v-btn color="primary" :disabled="!valid" @click="submitName">Create</v-btn>
