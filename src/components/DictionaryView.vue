@@ -28,13 +28,13 @@
         <td>{{index+1}}</td>
         <td :class="{'active': editPairs}">{{pair.domain}}
           <br>
-          <v-form v-if="editPairs" class="editForm">
+          <v-form v-if="editPairs">
             <v-text-field v-model.trim="pair.domain" required></v-text-field>
           </v-form>
         </td>
         <td :class="{'active': editPairs}">{{pair.range}}
           <br>
-          <v-form v-if="editPairs" class="editForm">
+          <v-form v-if="editPairs">
             <v-text-field v-model.trim="pair.range" required></v-text-field>
           </v-form>
         </td>
@@ -60,6 +60,7 @@
     <v-btn v-if="!addNewPair" @click="addNewPair = !addNewPair" color="blue darken-2" dark>
       <v-icon dark left>add</v-icon>Add row
     </v-btn>
+    <v-btn color="error" @click="removeDictionary(index)">Delete</v-btn>
     <br>
     <br>
     <router-link to="/dictionaries">
@@ -91,6 +92,10 @@ export default {
   methods: {
     removePair(index) {
       this.dictionaries[this.id].pairs.splice(index, 1);
+
+      if(this.dictionaries[this.id].pairs.length < 1) {
+        this.removeDictionary(this.id);
+      };
     },
     editPair(index) {
       this.editPairs = !this.editPairs;
@@ -103,6 +108,9 @@ export default {
         } else {}
       });
     },
+    removeDictionary(id) {
+      this.dictionaries.splice(id, 1);
+    }
   }
 }
 </script>
@@ -144,9 +152,6 @@ a {
   width: 600px;
 }
 
-.editForm {
-  
-}
 .active {
   color: gray;
 }
