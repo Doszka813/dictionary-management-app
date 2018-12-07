@@ -1,9 +1,8 @@
 <template>
   <v-app dark id="app">
-    <v-toolbar>
-      <v-toolbar-title class="white--text"><router-link to='/'>Dictionary Management</router-link></v-toolbar-title>
+    <v-toolbar >
+      <v-toolbar-title><router-link to='/'>Dictionary Management</router-link></v-toolbar-title>
       <v-spacer></v-spacer>
-
       <v-toolbar-items>
         <v-btn flat>
           <router-link to='/dictionaries'>Dictionaries</router-link>
