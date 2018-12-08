@@ -59,7 +59,7 @@
       <v-icon dark left>add</v-icon>Add row
     </v-btn>
     <v-btn color="error" @click="removeDictionary(id)">Delete</v-btn>
-    <v-btn color="primary" @click="findDuplicates(dictionaries[id].pairs)">Validate</v-btn>
+    <v-btn color="primary" @click="validate()">Validate</v-btn>
 
     <br>
     <br>
@@ -73,12 +73,14 @@
 
 <script>
 import { dictionaries } from './dictionaries'
+import { dictionaryService } from '../services/dictionaryService'
 
 export default {
   name: 'DictionaryView',
   data() {
     return {
       dictionaries: dictionaries,
+      service: dictionaryService,
       id: this.$route.params.id,
       addNewPair: false,
       editName: false,
@@ -104,7 +106,6 @@ export default {
       this.$validator.validateAll().then((result) => {
         if(result) {
           this.dictionaries[this.id].pairs.push(this.pair);
-          // console.log(this.findDuplicates(this.dictionaries[this.id].pairs));
           this.pair = {};
         } else {}
       });
@@ -112,23 +113,26 @@ export default {
     removeDictionary(id) {
       this.dictionaries.splice(id, 1);
     },
-    findDuplicates (data) {
-      let duplicates = []
-      let domains = data.map(el => el.domain);
-      data.forEach((element, index) => {
-        let duplicateIdx = domains.indexOf(element.domain, index + 1);
-        if (duplicateIdx > -1) {
-          if (element.range === data[duplicateIdx].range
-            &&  duplicates.indexOf(duplicateIdx) === -1) {
-              if(duplicates.indexOf(index) === -1){
-                duplicates.push(index)
-              }
-              duplicates.push(duplicateIdx)           
-          }
-        }
-      })
-      console.log(duplicates)
+    validate() {
+      this.service.findDuplicates(dictionaries[this.id].pairs);
     }
+    // findDuplicates (data) {
+    //   let duplicates = []
+    //   let domains = data.map(el => el.domain);
+    //   data.forEach((element, index) => {
+    //     let duplicateIdx = domains.indexOf(element.domain, index + 1);
+    //     if (duplicateIdx > -1) {
+    //       if (element.range === data[duplicateIdx].range
+    //         &&  duplicates.indexOf(duplicateIdx) === -1) {
+    //           if(duplicates.indexOf(index) === -1){
+    //             duplicates.push(index)
+    //           }
+    //           duplicates.push(duplicateIdx)           
+    //       }
+    //     }
+    //   })
+    //   console.log(duplicates)
+    // }
   }
 }
 </script>

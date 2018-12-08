@@ -28,7 +28,7 @@ export default new Router({
       path: '/addDictionary',
       name: 'DictionaryCreator',
       component: DictionaryCreator
-    },
+    }
   ],
   mode: 'history'
 })
