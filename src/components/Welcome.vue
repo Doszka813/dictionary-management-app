@@ -17,9 +17,5 @@ export default {
 </script>
 
 <style>
-h1 {
-  margin: 50px auto;
-  font-weight: normal;
-  padding: 30px;
-}
+@import '../css/style.css';
 </style>

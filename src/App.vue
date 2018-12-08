@@ -23,23 +23,15 @@
 
 </script>
 
-<style scoped>
-  body {
-    margin: 0 auto;
-  }
+<style>
+@import 'css/style.css';
+
+body {
+  margin: 0 auto;
+}
   
-  #app {
-    text-align: center;
-  }
-
-  a {
-    text-decoration: none;
-    font-size: 16px;
-  }
-
-  h1 {
-    font-weight: normal;
-    padding: 40px;
-  }
+#app {
+  text-align: center;
+}
 
 </style>

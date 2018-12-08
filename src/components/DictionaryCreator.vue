@@ -2,7 +2,7 @@
   <div class="forms">
     <h3>{{dictionary.name}}</h3>
     <v-form v-if="!isNameAdded" ref="form" v-model="valid" lazy-validation>
-      <v-text-field v-model.trim="dictionary.name" :counter="20" label="Name" v-validate="'required | min:4 | max:20 '">
+      <v-text-field v-model.trim="dictionary.name" :counter="20" label="Name" name="name" v-validate="{ required: true, min:4, max:20}">
       </v-text-field>
       <br>
       <v-btn color="primary" :disabled="!valid" @click="submitName">Create</v-btn>
@@ -12,8 +12,8 @@
       </router-link>
     </v-form>
     <v-form v-if="isNameAdded" ref="form" lazy-validation>
-      <v-text-field v-model.trim="pair.domain" label="Domain" required></v-text-field>
-      <v-text-field v-model.trim="pair.range" label="Range" required></v-text-field>
+      <v-text-field v-model.trim="pair.domain" label="Domain" name="domain" v-validate="{ required: true }"></v-text-field>
+      <v-text-field v-model.trim="pair.range" label="Range" name="range" v-validate="{ required: true }"></v-text-field>
       <br>
       <v-btn color="primary" :disabled="!valid" @click="addPair">Add<v-icon>add</v-icon>
       </v-btn>

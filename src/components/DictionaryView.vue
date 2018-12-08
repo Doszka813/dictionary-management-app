@@ -5,11 +5,9 @@
     </h1>
     <v-form v-if="editName">
       <v-text-field class="form" @keyup.enter="submit" v-model.trim="dictionaries[id].name" :counter="20" label="Edit Name"
-        v-validate="'required | min:4 | max:20 '">
+        v-validate="'required | min:4 | max:20'">
       </v-text-field>
-      <span>
-        <v-icon @click="editName = !editName">done_outline</v-icon>
-      </span>
+      <v-icon @click="editName = !editName">done_outline</v-icon>
     </v-form>
     <table>
       <tr>
@@ -60,7 +58,9 @@
     <v-btn v-if="!addNewPair" @click="addNewPair = !addNewPair" color="blue darken-2" dark>
       <v-icon dark left>add</v-icon>Add row
     </v-btn>
-    <v-btn color="error" @click="removeDictionary(index)">Delete</v-btn>
+    <v-btn color="error" @click="removeDictionary(id)">Delete</v-btn>
+    <v-btn color="primary" @click="findDuplicates(dictionaries[id].pairs)">Validate</v-btn>
+
     <br>
     <br>
     <router-link to="/dictionaries">
@@ -104,47 +104,41 @@ export default {
       this.$validator.validateAll().then((result) => {
         if(result) {
           this.dictionaries[this.id].pairs.push(this.pair);
+          // console.log(this.findDuplicates(this.dictionaries[this.id].pairs));
           this.pair = {};
         } else {}
       });
     },
     removeDictionary(id) {
       this.dictionaries.splice(id, 1);
+    },
+    findDuplicates (data) {
+      let duplicates = []
+      let domains = data.map(el => el.domain);
+      data.forEach((element, index) => {
+        let duplicateIdx = domains.indexOf(element.domain, index + 1);
+        if (duplicateIdx > -1) {
+          if (element.range === data[duplicateIdx].range
+            &&  duplicates.indexOf(duplicateIdx) === -1) {
+              if(duplicates.indexOf(index) === -1){
+                duplicates.push(index)
+              }
+              duplicates.push(duplicateIdx)           
+          }
+        }
+      })
+      console.log(duplicates)
     }
   }
 }
 </script>
 
-<style scoped>
-h1 {
-  margin-top: 30px;
-}
-
+<style>
 #icon {
   font-size: 20px;
   position: relative;
-  top: -10px;
+  top: -7px;
   left: 10px;
-}
-
-table {
-  font-size: 20px;
-  text-align: left;
-  margin: 40px auto;
-  border-collapse: collapse;
-}
-
-td {
-  border-bottom: 1px solid white;
-}
-
-th, td {
-  padding: 0 40px;
-  padding-top: 15px;
-}
-
-a {
-  text-decoration: none;
 }
 
 .form {

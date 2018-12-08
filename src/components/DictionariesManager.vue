@@ -48,9 +48,11 @@
 
 <script>
 import { dictionaries } from './dictionaries'
+// import { DictionaryService } from '../mixins/DictionaryService'
 
 export default {
   name: 'DictionariesManager',
+  // mixins: [DictionaryService],
   data() {
     return {
       title: 'Available Dictionaries',
@@ -69,30 +71,6 @@ export default {
 <style scoped>
 #counter {
   margin-left: 15px;
-}
-
-h1 {
-  padding: 30px;
-}
-
-table {
-  font-size: 20px;
-  margin: 40px auto;
-  border-collapse: collapse;
-}
-
-tr {
-  text-align: left;
-  border-bottom: 1px solid white;
-}
-
-th, td {
-  padding: 0 40px;
-  padding-top: 15px;
-}
-
-a {
-  text-decoration: none;
 }
 
 #card {

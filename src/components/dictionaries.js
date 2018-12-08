@@ -1,4 +1,4 @@
-export let dictionaries = [{
+export const dictionaries = [{
     id: 0,
     name: 'Colors 1',
     pairs: [{
