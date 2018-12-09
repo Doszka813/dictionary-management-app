@@ -1,68 +1,33 @@
 export const dictionaryService = ({
-  findDuplicates (data) {
-    let duplicates = []
-    let domains = data.map(el => el.domain)
-    data.forEach((element, index) => {
-      let duplicateIdx = domains.indexOf(element.domain, index + 1)
-      if (duplicateIdx > -1) {
-        if (element.range === data[duplicateIdx].range &&
-          duplicates.indexOf(duplicateIdx) === -1) {
-          if (duplicates.indexOf(index) === -1) {
-            duplicates.push(index)
-          }
-          duplicates.push(duplicateIdx)
-        }
-      }
-    })
-    return duplicates
+  getAll () {
+    return JSON.parse(window.localStorage.getItem('dictionaries')) || []
   },
-  findForks (data) {
-    let forks = []
-    let domains = data.map(el => el.domain)
-    data.forEach((element, index) => {
-      let forkIdx = domains.indexOf(element.domain, index + 1)
-      if (forkIdx > -1) {
-        if (element.range !== data[forkIdx].range &&
-          forks.indexOf(forkIdx) === -1) {
-          if (forks.indexOf(index) === -1) {
-            forks.push(index)
-          }
-          forks.push(forkIdx)
-        }
-      }
-    })
-    return forks
+  getById(id) {
+    return this.getAll().find(dictionary => dictionary.id === +id)
   },
-  findChains (data) {
-    let chains = []
-    let domains = data.map(el => el.domain)
-    data.forEach((element, index) => {
-      let chainIdx = domains.indexOf(element.range)
-      if (chainIdx > -1) {
-        if (element.domain !== data[chainIdx].range && chains.indexOf(chainIdx) === -1) {
-          if (chains.indexOf(index) === -1) {
-            chains.push(index)
-          }
-          chains.push(chainIdx)
-        }
-      }
-    })
-    return chains
+  add(dictionary){
+    let dictionaries = this.getAll()
+    let dictionaryObj = JSON.parse(dictionary)
+    dictionaryObj.id = dictionaries.length
+    dictionaries.push(dictionaryObj)
+    window.localStorage.setItem('dictionaries', JSON.stringify(dictionaries))
   },
-  findCycles (data) {
-    let cycles = []
-    let domains = data.map(el => el.domain)
-    data.forEach((element, index) => {
-      let cycleIdx = domains.indexOf(element.range)
-      if (cycleIdx > -1) {
-        if (element.domain === data[cycleIdx].range && cycles.indexOf(cycleIdx) === -1) {
-          if (cycles.indexOf(index) === -1) {
-            cycles.push(index)
-          }
-          cycles.push(cycleIdx)
-        }
-      }
-    })
-    return cycles
+  update(dictionary){
+    let dictionaries = this.getAll()
+    let dictionaryObj = JSON.parse(dictionary)
+
+    const dictionaryIdx = dictionaries.findIndex(dict => dict.id === +dictionaryObj.id)
+    dictionaries[dictionaryIdx] = dictionaryObj
+
+    window.localStorage.setItem('dictionaries', JSON.stringify(dictionaries))
+  },
+  removeById(id) {
+    let dictionaries = this.getAll()
+
+    const dictionaryIdx = dictionaries.findIndex(dict => dict.id === id)
+    dictionaries.splice(dictionaryIdx, 1) 
+    window.localStorage.setItem('dictionaries', JSON.stringify(dictionaries))
   }
+
+
 })

@@ -20,7 +20,6 @@
       <br>
       <br>
       <v-btn color="primary" @click="submit">Submit</v-btn>
-      <v-btn color="error" @click="clear">Clear</v-btn>
       <v-btn @click="isNameAdded = !isNameAdded"><v-icon>arrow_back</v-icon>Back</v-btn>
       <br>
       <br>
@@ -47,21 +46,22 @@
 </template>
 
 <script>
-import { dictionaries } from './dictionaries';
+import { dictionaryService } from '../services/dictionaryService'
 
 export default {
   name: 'DictionaryCreator',
   data() {
     return {
-      dictionaries: dictionaries,
+      service: dictionaryService,
       dictionary: {
-        id: dictionaries.length,
+        id: 0,
         name: '',
         pairs: []
       },
       pair: {
         domain: '',
-        range: ''
+        range: '',
+        errors: []
       },
       isNameAdded: false,
     }
@@ -77,12 +77,14 @@ export default {
       this.$validator.validateAll().then((result) => {
         if(result) {
           this.dictionary.pairs.push(this.pair);
-          this.pair = {};
+          this.pair = {
+            errors: []
+          };
         } else {}
       });
     },
     submit() {
-      this.dictionaries.push(this.dictionary);
+      this.service.add(JSON.stringify(this.dictionary));
       this.$router.push('/dictionaries');
     }
   }
@@ -93,25 +95,5 @@ export default {
 .forms {
   margin: 40px auto;
   width: 600px;
-}
-
-a {
-  text-decoration: none;
-}
-
-table {
-  margin: 40px auto;
-  border-collapse: collapse;
-}
-
-tr {
-  text-align: left;
-  border-bottom: 1px solid white;
-}
-
-th,
-td {
-  padding: 0 40px 0 0;
-  padding-top: 15px;
 }
 </style>

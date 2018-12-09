@@ -35,7 +35,6 @@
                 <td>{{pair.range}}</td>
               </tr>
             </table>
-            <v-btn color="error" @click="removeDictionary(index)">Delete</v-btn>
             <router-link :to="{path: '/dictionary/' + dictionary.id }">
               <v-btn color="dark">Edit</v-btn>
             </router-link>
@@ -47,22 +46,19 @@
 </template>
 
 <script>
-import { dictionaries } from './dictionaries'
-// import { DictionaryService } from '../mixins/DictionaryService'
+import { dictionaryService } from '../services/dictionaryService'
 
 export default {
   name: 'DictionariesManager',
-  // mixins: [DictionaryService],
   data() {
     return {
       title: 'Available Dictionaries',
-      dictionaries: dictionaries,
+      dictionaries: [],
+      service: dictionaryService,
     }
   },
-  methods: {
-    removeDictionary(id) {
-      this.dictionaries.splice(id, 1);
-    }
+  created() {
+    this.dictionaries = this.service.getAll();
   }
 }
 

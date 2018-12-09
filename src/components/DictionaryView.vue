@@ -1,10 +1,10 @@
 <template>
-  <div class="dictionary">
-    <h1 id="dictionaryName" :class="{'active': editName}">{{dictionaries[id].name}}<v-icon @click="editName = !editName"
+  <div class="dictionary" v-if="dictionary">
+    <h1 id="dictionaryName" :class="{'active': editName}">{{dictionary.name}}<v-icon @click="editName = !editName"
         id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon>
     </h1>
     <v-form v-if="editName">
-      <v-text-field class="form" v-model.trim="dictionaries[id].name" :counter="20" label="Edit Name"
+      <v-text-field class="form" v-model.trim="dictionary.name" :counter="20" label="Edit Name"
         v-validate="'required | min:4 | max:20'">
       </v-text-field>
       <v-icon @click="editName = !editName">done_outline</v-icon>
@@ -23,7 +23,7 @@
         <th>
         </th>
       </tr>
-      <tr v-for="(pair, index) in dictionaries[id].pairs" :key="index">
+      <tr v-for="(pair, index) in dictionary.pairs" :key="index">
         <td>{{index+1}}</td>
         <td :class="{'active': editPairs}">{{pair.domain}}
           <v-form v-if="editPairs">
@@ -71,7 +71,7 @@
     </v-btn>
     <v-btn color="primary" @click="editPair(index)">Edit rows<v-icon id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon></v-btn>
     <br>
-    <v-btn color="error" @click="removeDictionary(id)">Delete</v-btn>
+    <v-btn color="error" @click="removeDictionary()">Delete</v-btn>
     <router-link to="/dictionaries">
       <v-btn>
         <v-icon left>arrow_back</v-icon>Back
@@ -81,16 +81,16 @@
 </template>
 
 <script>
-import { dictionaries } from './dictionaries'
+import { dictionaryValidationService } from '../services/dictionaryValidationService'
 import { dictionaryService } from '../services/dictionaryService'
 
 export default {
   name: 'DictionaryView',
   data() {
     return {
-      dictionaries: dictionaries,
+      validationService: dictionaryValidationService,
       service: dictionaryService,
-      id: this.$route.params.id,
+      dictionary: dictionaryService.getById(this.$route.params.id),
       addNewPair: false,
       editName: false,
       editPairs: false,
@@ -101,42 +101,52 @@ export default {
       },
     }
   },
+  created() {
+    this.dictionaries = this.service.getAll();
+  },
   methods: {
     removePair(index) {
-      this.dictionaries[this.id].pairs.splice(index, 1);
-      if (this.dictionaries[this.id].pairs.length < 1) {
-        this.removeDictionary(this.id);
+      this.dictionary.pairs.splice(index, 1);
+      if (this.dictionary.pairs.length < 1) {
+        this.removeDictionary(this.dictionary.id);
+        this.$router.push('/dictionaries');
       };
       this.validate();
+      this.service.update(JSON.stringify(this.dictionary));
     },
     editPair(index) {
       this.editPairs = !this.editPairs;
       this.validate();
+      this.service.update(JSON.stringify(this.dictionary));
     },
     addPair() {
       this.$validator.validateAll().then((result) => {
         if (result) {
-          this.dictionaries[this.id].pairs.push(this.pair);
+          this.dictionary.pairs.push(this.pair);
           this.pair = {
             errors: []
           };
           this.validate();
+          this.service.update(JSON.stringify(this.dictionary));
         } else {}
       });
     },
     removeDictionary(id) {
-      this.dictionaries.splice(id, 1);
+      this.service.removeById(id);
     },
     validate() {
-      dictionaries[this.id].pairs.forEach(pair => pair.errors = []);
-      let duplicates = this.service.findDuplicates(dictionaries[this.id].pairs);
-      duplicates.forEach(duplicateIndex =>  this.dictionaries[this.id].pairs[duplicateIndex].errors.push("DUPLICATE"));
-      let forks = this.service.findForks(dictionaries[this.id].pairs);
-      forks.forEach(forkIndex =>  this.dictionaries[this.id].pairs[forkIndex].errors.push("FORK"));
-      let chains = this.service.findChains(dictionaries[this.id].pairs);
-      chains.forEach(chainIndex => this.dictionaries[this.id].pairs[chainIndex].errors.push("CHAIN"));
-      let cycles = this.service.findCycles(dictionaries[this.id].pairs);
-      cycles.forEach(cycleIndex => this.dictionaries[this.id].pairs[cycleIndex].errors.push("CYCLE"))
+      this.dictionary.pairs.forEach(pair => pair.errors = []);
+      const addError = (pairIndex, errorType) => this.dictionary.pairs[pairIndex].errors.push(errorType)
+
+      this.validationService.findDuplicates(this.dictionary.pairs)
+          .forEach(errorPairIndex => addError(errorPairIndex, "DUPLICATE"));
+
+      let forks = this.validationService.findForks(this.dictionary.pairs);
+      forks.forEach(forkIndex =>  this.dictionary.pairs[forkIndex].errors.push("FORK"));
+      let chains = this.validationService.findChains(this.dictionary.pairs);
+      chains.forEach(chainIndex => this.dictionary.pairs[chainIndex].errors.push("CHAIN"));
+      let cycles = this.validationService.findCycles(this.dictionary.pairs);
+      cycles.forEach(cycleIndex => this.dictionary.pairs[cycleIndex].errors.push("CYCLE"))
     }
   }
 }
