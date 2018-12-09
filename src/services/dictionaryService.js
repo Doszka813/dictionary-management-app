@@ -14,7 +14,6 @@ export const dictionaryService = ({
         }
       }
     })
-    console.log(duplicates)
     return duplicates
   },
   findForks (data) {
@@ -32,7 +31,6 @@ export const dictionaryService = ({
         }
       }
     })
-    console.log(forks)
     return forks
   },
   findChains (data) {
@@ -41,7 +39,7 @@ export const dictionaryService = ({
     data.forEach((element, index) => {
       let chainIdx = domains.indexOf(element.range)
       if (chainIdx > -1) {
-        if (chains.indexOf(chainIdx) === -1) {
+        if (element.domain !== data[chainIdx].range && chains.indexOf(chainIdx) === -1) {
           if (chains.indexOf(index) === -1) {
             chains.push(index)
           }
@@ -49,7 +47,22 @@ export const dictionaryService = ({
         }
       }
     })
-    console.log(chains)
     return chains
+  },
+  findCycles (data) {
+    let cycles = []
+    let domains = data.map(el => el.domain)
+    data.forEach((element, index) => {
+      let cycleIdx = domains.indexOf(element.range)
+      if (cycleIdx > -1) {
+        if (element.domain === data[cycleIdx].range && cycles.indexOf(cycleIdx) === -1) {
+          if (cycles.indexOf(index) === -1) {
+            cycles.push(index)
+          }
+          cycles.push(cycleIdx)
+        }
+      }
+    })
+    return cycles
   }
 })

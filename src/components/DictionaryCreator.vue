@@ -1,11 +1,11 @@
 <template>
   <div class="forms">
     <h3>{{dictionary.name}}</h3>
-    <v-form v-if="!isNameAdded" ref="form" v-model="valid" lazy-validation>
+    <v-form v-if="!isNameAdded" ref="form">
       <v-text-field v-model.trim="dictionary.name" :counter="20" label="Name" name="name" v-validate="{ required: true, min:4, max:20}">
       </v-text-field>
       <br>
-      <v-btn color="primary" :disabled="!valid" @click="submitName">Create</v-btn>
+      <v-btn color="primary" @click="submitName">Create</v-btn>
       <v-btn color="error" @click="clear">Clear</v-btn>
       <router-link to="/dictionaries">
         <v-btn><v-icon>arrow_back</v-icon>Back</v-btn>
@@ -15,11 +15,11 @@
       <v-text-field v-model.trim="pair.domain" label="Domain" name="domain" v-validate="{ required: true }"></v-text-field>
       <v-text-field v-model.trim="pair.range" label="Range" name="range" v-validate="{ required: true }"></v-text-field>
       <br>
-      <v-btn color="primary" :disabled="!valid" @click="addPair">Add<v-icon>add</v-icon>
+      <v-btn color="primary" @click="addPair">Add<v-icon>add</v-icon>
       </v-btn>
       <br>
       <br>
-      <v-btn color="primary" :disabled="!valid" @click="submit">Submit</v-btn>
+      <v-btn color="primary" @click="submit">Submit</v-btn>
       <v-btn color="error" @click="clear">Clear</v-btn>
       <v-btn @click="isNameAdded = !isNameAdded"><v-icon>arrow_back</v-icon>Back</v-btn>
       <br>

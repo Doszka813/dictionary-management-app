@@ -4,11 +4,12 @@
         id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon>
     </h1>
     <v-form v-if="editName">
-      <v-text-field class="form" @keyup.enter="submit" v-model.trim="dictionaries[id].name" :counter="20" label="Edit Name"
+      <v-text-field class="form" v-model.trim="dictionaries[id].name" :counter="20" label="Edit Name"
         v-validate="'required | min:4 | max:20'">
       </v-text-field>
       <v-icon @click="editName = !editName">done_outline</v-icon>
     </v-form>
+    <v-btn color="primary" @click="validate()">Validate</v-btn>
     <table>
       <tr>
         <th>
@@ -50,29 +51,27 @@
           <v-icon color="red">error_outline</v-icon> CHAIN
         </td>
         <td v-if="pair.errors.indexOf('CYCLE') !== -1">
-          <v-icon color="red">error_outline</v-icon> CYCLE
+          <v-icon color="#b30000">error_outline</v-icon> CYCLE
         </td>
       </tr>
     </table>
-    <v-form class="form" v-if="addNewPair" ref="form" v-model="valid" lazy-validation>
+    <v-form class="form" v-if="addNewPair" ref="form">
       <v-text-field v-model.trim="pair.domain" label="Domain" required></v-text-field>
       <v-text-field v-model.trim="pair.range" label="Range" required></v-text-field>
       <br>
-      <v-btn color="primary" :disabled="!valid" @click="addPair">Add
+      <v-btn color="primary" @click="addPair">Add
         <v-icon>add</v-icon>
       </v-btn>
-      <v-btn color="primary" :disabled="!valid" @click="addNewPair = !addNewPair">Submit</v-btn>
+      <v-btn color="primary" @click="addNewPair = !addNewPair">Cancel</v-btn>
 
     </v-form>
     <br>
     <v-btn v-if="!addNewPair" @click="addNewPair = !addNewPair" color="blue darken-2" dark>
       <v-icon dark left>add</v-icon>Add row
     </v-btn>
-    <v-btn color="primary" @click="validate()">Validate</v-btn>
-    <v-btn color="primary" @click="editPair(index)">Edit <v-icon id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon></v-btn>
+    <v-btn color="primary" @click="editPair(index)">Edit rows<v-icon id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon></v-btn>
     <br>
     <v-btn color="error" @click="removeDictionary(id)">Delete</v-btn>
-    <br>
     <router-link to="/dictionaries">
       <v-btn>
         <v-icon left>arrow_back</v-icon>Back
@@ -105,13 +104,14 @@ export default {
   methods: {
     removePair(index) {
       this.dictionaries[this.id].pairs.splice(index, 1);
-
       if (this.dictionaries[this.id].pairs.length < 1) {
         this.removeDictionary(this.id);
       };
+      this.validate();
     },
     editPair(index) {
       this.editPairs = !this.editPairs;
+      this.validate();
     },
     addPair() {
       this.$validator.validateAll().then((result) => {
@@ -120,6 +120,7 @@ export default {
           this.pair = {
             errors: []
           };
+          this.validate();
         } else {}
       });
     },
@@ -127,14 +128,15 @@ export default {
       this.dictionaries.splice(id, 1);
     },
     validate() {
+      dictionaries[this.id].pairs.forEach(pair => pair.errors = []);
       let duplicates = this.service.findDuplicates(dictionaries[this.id].pairs);
       duplicates.forEach(duplicateIndex =>  this.dictionaries[this.id].pairs[duplicateIndex].errors.push("DUPLICATE"));
       let forks = this.service.findForks(dictionaries[this.id].pairs);
       forks.forEach(forkIndex =>  this.dictionaries[this.id].pairs[forkIndex].errors.push("FORK"));
       let chains = this.service.findChains(dictionaries[this.id].pairs);
-      chains.forEach(chainIndex =>  this.dictionaries[this.id].pairs[chainIndex].errors.push("CHAIN"));
-
-
+      chains.forEach(chainIndex => this.dictionaries[this.id].pairs[chainIndex].errors.push("CHAIN"));
+      let cycles = this.service.findCycles(dictionaries[this.id].pairs);
+      cycles.forEach(cycleIndex => this.dictionaries[this.id].pairs[cycleIndex].errors.push("CYCLE"))
     }
   }
 }

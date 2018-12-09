@@ -27,6 +27,11 @@ export const dictionaries = [{
         errors: []
       },
       {
+        domain: 'Stonegrey',
+        range: 'Dark grey',
+        errors: []
+      },
+      {
         domain: 'Midnight Black',
         range: 'Black',
         errors: []

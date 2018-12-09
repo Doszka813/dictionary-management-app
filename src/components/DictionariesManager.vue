@@ -8,7 +8,7 @@
         </v-icon>
       </v-badge>
     </h1>
-    <v-tabs v-model="active" dark slider-color="blue">
+    <v-tabs dark slider-color="blue">
       <v-tab v-for="(dictionary, index) in dictionaries" :key="index" ripple>
         {{ dictionary.name }}
       </v-tab>
