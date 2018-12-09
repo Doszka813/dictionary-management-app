@@ -3,15 +3,18 @@ export const dictionaries = [{
     name: 'Colors 1',
     pairs: [{
         domain: 'Stonegrey',
-        range: 'Dark grey'
+        range: 'Dark grey',
+        errors: []
       },
       {
         domain: 'Midnight Black',
-        range: 'Black'
+        range: 'Black',
+        errors: []
       },
       {
         domain: 'Mystic Silver',
-        range: 'Silver'
+        range: 'Silver',
+        errors: []
       }
     ]
   },
@@ -20,19 +23,23 @@ export const dictionaries = [{
     name: 'Colors 2',
     pairs: [{
         domain: 'Stonegrey',
-        range: 'Dark grey'
+        range: 'Dark grey',
+        errors: []
       },
       {
         domain: 'Midnight Black',
-        range: 'Black'
+        range: 'Black',
+        errors: []
       },
       {
         domain: 'Mystic Silver',
-        range: 'Silver'
+        range: 'Silver',
+        errors: []
       },
       {
         domain: 'Candy cotton',
-        range: 'Pink'
+        range: 'Pink',
+        errors: []
       }
     ]
   },
@@ -41,15 +48,18 @@ export const dictionaries = [{
     name: 'Colors 3',
     pairs: [{
         domain: 'Stonegrey',
-        range: 'Dark grey'
+        range: 'Dark grey',
+        errors: []
       },
       {
         domain: 'Midnight Black',
-        range: 'Black'
+        range: 'Black',
+        errors: []
       },
       {
         domain: 'Mystic Silver',
-        range: 'Silver'
+        range: 'Silver',
+        errors: []
       }
     ]
   },
@@ -58,19 +68,23 @@ export const dictionaries = [{
     name: 'Colors 4',
     pairs: [{
         domain: 'Stonegrey',
-        range: 'Dark grey'
+        range: 'Dark grey',
+        errors: []
       },
       {
         domain: 'Midnight Black',
-        range: 'Black'
+        range: 'Black',
+        errors: []
       },
       {
         domain: 'Mystic Silver',
-        range: 'Silver'
+        range: 'Silver',
+        errors: []
       },
       {
         domain: 'Light moss',
-        range: 'Green'
+        range: 'Green',
+        errors: []
       }
     ]
   },
@@ -79,15 +93,18 @@ export const dictionaries = [{
     name: 'Colors 5',
     pairs: [{
         domain: 'Stonegrey',
-        range: 'Dark grey'
+        range: 'Dark grey',
+        errors: []
       },
       {
         domain: 'Midnight Black',
-        range: 'Black'
+        range: 'Black',
+        errors: []
       },
       {
         domain: 'Mystic Silver',
-        range: 'Silver'
+        range: 'Silver',
+        errors: []
       }
     ]
   }

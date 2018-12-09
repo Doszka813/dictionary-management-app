@@ -21,9 +21,6 @@
         </th>
         <th>
         </th>
-        <th @click="editPair(index)">
-          <v-icon :class="{'active': editName, 'inactive': !editName}">edit</v-icon>
-        </th>
       </tr>
       <tr v-for="(pair, index) in dictionaries[id].pairs" :key="index">
         <td>{{index+1}}</td>
@@ -43,8 +40,17 @@
         <td @click="removePair(index)">
           <v-icon dark>clear</v-icon>
         </td>
-             <td v-if="pair.error">
-          <v-icon color="red">error_outline</v-icon>
+        <td v-if="pair.errors.indexOf('DUPLICATE') !== -1">
+          <v-icon color="yellow">error_outline</v-icon> DUPLICATE
+        </td>
+        <td v-if="pair.errors.indexOf('FORK') !== -1">
+          <v-icon color="orange">error_outline</v-icon> FORK
+        </td>
+        <td v-if="pair.errors.indexOf('CHAIN') !== -1">
+          <v-icon color="red">error_outline</v-icon> CHAIN
+        </td>
+        <td v-if="pair.errors.indexOf('CYCLE') !== -1">
+          <v-icon color="red">error_outline</v-icon> CYCLE
         </td>
       </tr>
     </table>
@@ -62,10 +68,10 @@
     <v-btn v-if="!addNewPair" @click="addNewPair = !addNewPair" color="blue darken-2" dark>
       <v-icon dark left>add</v-icon>Add row
     </v-btn>
-    <v-btn color="error" @click="removeDictionary(id)">Delete</v-btn>
     <v-btn color="primary" @click="validate()">Validate</v-btn>
-
+    <v-btn color="primary" @click="editPair(index)">Edit <v-icon id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon></v-btn>
     <br>
+    <v-btn color="error" @click="removeDictionary(id)">Delete</v-btn>
     <br>
     <router-link to="/dictionaries">
       <v-btn>
@@ -92,7 +98,7 @@ export default {
       pair: {
         domain: '',
         range: '',
-        error: false
+        errors: [],
       },
     }
   },
@@ -111,7 +117,9 @@ export default {
       this.$validator.validateAll().then((result) => {
         if (result) {
           this.dictionaries[this.id].pairs.push(this.pair);
-          this.pair = {};
+          this.pair = {
+            errors: []
+          };
         } else {}
       });
     },
@@ -120,11 +128,13 @@ export default {
     },
     validate() {
       let duplicates = this.service.findDuplicates(dictionaries[this.id].pairs);
-      this.dictionaries[this.id].pairs.forEach((element, index) => {
-        if(duplicates.includes(index)) {
-          this.dictionaries[this.id].pairs[index].error = true;
-        }        
-      });
+      duplicates.forEach(duplicateIndex =>  this.dictionaries[this.id].pairs[duplicateIndex].errors.push("DUPLICATE"));
+      let forks = this.service.findForks(dictionaries[this.id].pairs);
+      forks.forEach(forkIndex =>  this.dictionaries[this.id].pairs[forkIndex].errors.push("FORK"));
+      let chains = this.service.findChains(dictionaries[this.id].pairs);
+      chains.forEach(chainIndex =>  this.dictionaries[this.id].pairs[chainIndex].errors.push("CHAIN"));
+
+
     }
   }
 }
@@ -134,7 +144,6 @@ export default {
 #icon {
   font-size: 20px;
   position: relative;
-  top: -7px;
   left: 10px;
 }
 
