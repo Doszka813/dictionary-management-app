@@ -7,9 +7,8 @@
       <v-text-field class="form" v-model.trim="dictionary.name" :counter="20" label="Edit Name"
         v-validate="'required | min:4 | max:20'">
       </v-text-field>
-      <v-icon @click="editName = !editName">done_outline</v-icon>
+      <v-icon @click="saveName">done_outline</v-icon>
     </v-form>
-    <v-btn color="primary" @click="validate()">Validate</v-btn>
     <table>
       <tr>
         <th>
@@ -34,9 +33,6 @@
           <v-form v-if="editPairs">
             <v-text-field v-model.trim="pair.range" required></v-text-field>
           </v-form>
-        </td>
-        <td>
-          <v-icon v-if="editPairs" @click="editPairs = !editPairs">done_outline</v-icon>
         </td>
         <td @click="removePair(index)">
           <v-icon dark>clear</v-icon>
@@ -69,7 +65,8 @@
     <v-btn v-if="!addNewPair" @click="addNewPair = !addNewPair" color="blue darken-2" dark>
       <v-icon dark left>add</v-icon>Add row
     </v-btn>
-    <v-btn color="primary" @click="editPair(index)">Edit rows<v-icon id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon></v-btn>
+    <v-btn  v-if="editPairs" color="primary" @click="save()"><v-icon>done_outline</v-icon></v-btn>
+    <v-btn v-if="!editPairs" color="primary" @click="editPair()">Edit rows<v-icon id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon></v-btn>
     <br>
     <v-btn color="error" @click="removeDictionary()">Delete</v-btn>
     <router-link to="/dictionaries">
@@ -119,6 +116,14 @@ export default {
       this.validate();
       this.service.update(JSON.stringify(this.dictionary));
     },
+    save() {
+      this.service.update(JSON.stringify(this.dictionary));
+      this.editPairs = !this.editPairs;
+    },
+    saveName() {
+      this.service.update(JSON.stringify(this.dictionary));
+      this.editName = !this.editName;
+    },
     addPair() {
       this.$validator.validateAll().then((result) => {
         if (result) {
@@ -131,8 +136,9 @@ export default {
         } else {}
       });
     },
-    removeDictionary(id) {
-      this.service.removeById(id);
+    removeDictionary() {
+      this.service.removeById(this.dictionary.id);
+      this.$router.push('/dictionaries');
     },
     validate() {
       this.dictionary.pairs.forEach(pair => pair.errors = []);

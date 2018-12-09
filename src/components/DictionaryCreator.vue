@@ -54,7 +54,7 @@ export default {
     return {
       service: dictionaryService,
       dictionary: {
-        id: 0,
+        id: undefined,
         name: '',
         pairs: []
       },
