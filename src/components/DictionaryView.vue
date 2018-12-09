@@ -19,28 +19,32 @@
         <th>
           <h2>Range</h2>
         </th>
-        <th></th>
-        <th></th>
+        <th>
+        </th>
+        <th @click="editPair(index)">
+          <v-icon :class="{'active': editName, 'inactive': !editName}">edit</v-icon>
+        </th>
       </tr>
       <tr v-for="(pair, index) in dictionaries[id].pairs" :key="index">
         <td>{{index+1}}</td>
         <td :class="{'active': editPairs}">{{pair.domain}}
-          <br>
           <v-form v-if="editPairs">
             <v-text-field v-model.trim="pair.domain" required></v-text-field>
           </v-form>
         </td>
         <td :class="{'active': editPairs}">{{pair.range}}
-          <br>
           <v-form v-if="editPairs">
             <v-text-field v-model.trim="pair.range" required></v-text-field>
           </v-form>
         </td>
-        <td @click="editPair(index)">
-          <v-icon :class="{'active': editName, 'inactive': !editName}" >edit</v-icon>
+        <td>
+          <v-icon v-if="editPairs" @click="editPairs = !editPairs">done_outline</v-icon>
         </td>
         <td @click="removePair(index)">
           <v-icon dark>clear</v-icon>
+        </td>
+             <td v-if="pair.error">
+          <v-icon color="red">error_outline</v-icon>
         </td>
       </tr>
     </table>
@@ -87,15 +91,16 @@ export default {
       editPairs: false,
       pair: {
         domain: '',
-        range: ''
-      }
+        range: '',
+        error: false
+      },
     }
   },
   methods: {
     removePair(index) {
       this.dictionaries[this.id].pairs.splice(index, 1);
 
-      if(this.dictionaries[this.id].pairs.length < 1) {
+      if (this.dictionaries[this.id].pairs.length < 1) {
         this.removeDictionary(this.id);
       };
     },
@@ -104,7 +109,7 @@ export default {
     },
     addPair() {
       this.$validator.validateAll().then((result) => {
-        if(result) {
+        if (result) {
           this.dictionaries[this.id].pairs.push(this.pair);
           this.pair = {};
         } else {}
@@ -114,25 +119,13 @@ export default {
       this.dictionaries.splice(id, 1);
     },
     validate() {
-      this.service.findDuplicates(dictionaries[this.id].pairs);
+      let duplicates = this.service.findDuplicates(dictionaries[this.id].pairs);
+      this.dictionaries[this.id].pairs.forEach((element, index) => {
+        if(duplicates.includes(index)) {
+          this.dictionaries[this.id].pairs[index].error = true;
+        }        
+      });
     }
-    // findDuplicates (data) {
-    //   let duplicates = []
-    //   let domains = data.map(el => el.domain);
-    //   data.forEach((element, index) => {
-    //     let duplicateIdx = domains.indexOf(element.domain, index + 1);
-    //     if (duplicateIdx > -1) {
-    //       if (element.range === data[duplicateIdx].range
-    //         &&  duplicates.indexOf(duplicateIdx) === -1) {
-    //           if(duplicates.indexOf(index) === -1){
-    //             duplicates.push(index)
-    //           }
-    //           duplicates.push(duplicateIdx)           
-    //       }
-    //     }
-    //   })
-    //   console.log(duplicates)
-    // }
   }
 }
 </script>

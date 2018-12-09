@@ -12,9 +12,11 @@ table {
 
 tr {
   text-align: left;
-  border-bottom: 1px solid white;
 }
 
+th {
+  border-bottom: 1px solid white;
+}
 th,
 td {
   padding: 0 40px;

@@ -15,5 +15,6 @@ export const dictionaryService = ({
       }
     })
     console.log(duplicates)
+    return duplicates
   }
 })
