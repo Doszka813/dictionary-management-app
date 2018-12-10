@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Welcome from '@/components/Welcome'
-import DictionariesManager from '@/components/DictionariesManager'
+import DictionariesList from '@/components/DictionariesList'
 import DictionaryView from '@/components/DictionaryView'
 import DictionaryCreator from '@/components/DictionaryCreator'
 
@@ -16,8 +16,8 @@ export default new Router({
     },
     {
       path: '/dictionaries',
-      name: 'Dictionaries',
-      component: DictionariesManager
+      name: 'DictionariesList',
+      component: DictionariesList
     },
     {
       path: '/dictionary/:id',

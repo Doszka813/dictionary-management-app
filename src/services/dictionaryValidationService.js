@@ -1,5 +1,5 @@
 export const dictionaryValidationService = ({
-  findDuplicates (data) {
+  findDuplicates(data) {
     let duplicates = []
     let domains = data.map(el => el.domain)
     data.forEach((element, index) => {
@@ -16,7 +16,7 @@ export const dictionaryValidationService = ({
     })
     return duplicates
   },
-  findForks (data) {
+  findForks(data) {
     let forks = []
     let domains = data.map(el => el.domain)
     data.forEach((element, index) => {
@@ -33,7 +33,7 @@ export const dictionaryValidationService = ({
     })
     return forks
   },
-  findChains (data) {
+  findChains(data) {
     let chains = []
     let domains = data.map(el => el.domain)
     data.forEach((element, index) => {
@@ -49,7 +49,7 @@ export const dictionaryValidationService = ({
     })
     return chains
   },
-  findCycles (data) {
+  findCycles(data) {
     let cycles = []
     let domains = data.map(el => el.domain)
     data.forEach((element, index) => {

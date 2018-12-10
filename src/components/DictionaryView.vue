@@ -1,11 +1,10 @@
 <template>
-  <div class="dictionary" v-if="dictionary">
-    <h1 id="dictionaryName" :class="{'active': editName}">{{dictionary.name}}<v-icon @click="editName = !editName"
-        id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon>
+  <v-container color="blue-grey" v-if="dictionary">
+    <h1 id="dictionaryName" :class="{'active': editName}">{{dictionary.name}}
+      <v-icon @click="editName = !editName">edit</v-icon>
     </h1>
     <v-form v-if="editName">
-      <v-text-field class="form" v-model.trim="dictionary.name" :counter="20" label="Edit Name"
-        v-validate="'required | min:4 | max:20'">
+      <v-text-field class="form" v-model.trim="dictionary.name" :counter="20" label="Edit Name">
       </v-text-field>
       <v-icon @click="saveName">done_outline</v-icon>
     </v-form>
@@ -34,47 +33,45 @@
             <v-text-field v-model.trim="pair.range" required></v-text-field>
           </v-form>
         </td>
-        <td @click="removePair(index)">
-          <v-icon dark>clear</v-icon>
-        </td>
-        <td v-if="pair.errors.indexOf('DUPLICATE') !== -1">
+        <span @click="removePair(index)">
+          <v-icon>delete_forever</v-icon>
+        </span>
+        <span v-if="pair.errors.indexOf('DUPLICATE') !== -1">
           <v-icon color="yellow">error_outline</v-icon> DUPLICATE
-        </td>
-        <td v-if="pair.errors.indexOf('FORK') !== -1">
+        </span>
+        <span v-if="pair.errors.indexOf('FORK') !== -1">
           <v-icon color="orange">error_outline</v-icon> FORK
-        </td>
-        <td v-if="pair.errors.indexOf('CHAIN') !== -1">
+        </span>
+        <span v-if="pair.errors.indexOf('CHAIN') !== -1">
           <v-icon color="red">error_outline</v-icon> CHAIN
-        </td>
-        <td v-if="pair.errors.indexOf('CYCLE') !== -1">
+        </span>
+        <span v-if="pair.errors.indexOf('CYCLE') !== -1">
           <v-icon color="#b30000">error_outline</v-icon> CYCLE
-        </td>
+        </span>
       </tr>
     </table>
     <v-form class="form" v-if="addNewPair" ref="form">
-      <v-text-field v-model.trim="pair.domain" label="Domain" required></v-text-field>
-      <v-text-field v-model.trim="pair.range" label="Range" required></v-text-field>
+      <v-text-field v-model.trim="pair.domain" label="Domain"></v-text-field>
+      <v-text-field v-model.trim="pair.range" label="Range"></v-text-field>
       <br>
-      <v-btn color="primary" @click="addPair">Add
-        <v-icon>add</v-icon>
+      <v-btn color="blue darken-1" dark @click="addPair"><v-icon left>add</v-icon>Add
       </v-btn>
-      <v-btn color="primary" @click="addNewPair = !addNewPair">Cancel</v-btn>
-
+      <v-btn color="blue darken-1" dark @click="addNewPair = !addNewPair">Cancel</v-btn>
     </v-form>
     <br>
-    <v-btn v-if="!addNewPair" @click="addNewPair = !addNewPair" color="blue darken-2" dark>
+    <v-btn v-if="!addNewPair" @click="addNewPair = !addNewPair" color="blue darken-1" dark>
       <v-icon dark left>add</v-icon>Add row
     </v-btn>
-    <v-btn  v-if="editPairs" color="primary" @click="save()"><v-icon>done_outline</v-icon></v-btn>
-    <v-btn v-if="!editPairs" color="primary" @click="editPair()">Edit rows<v-icon id="icon" :class="{'active': editName, 'inactive': !editName}">edit</v-icon></v-btn>
+    <v-btn v-if="editPairs" color="blue darken-1" dark @click="save"><v-icon>done_outline</v-icon></v-btn>
+    <v-btn v-if="!editPairs" color="blue darken-1" dark @click="editPair"><v-icon left>edit</v-icon> Edit rows</v-btn>
     <br>
     <v-btn color="error" @click="removeDictionary()">Delete</v-btn>
-    <router-link to="/dictionaries">
-      <v-btn>
-        <v-icon left>arrow_back</v-icon>Back
+    <router-link v-if="!editPairs" to="/dictionaries">
+      <v-btn color="blue darken-1" dark>
+        <v-icon left>save</v-icon>Save
       </v-btn>
     </router-link>
-  </div>
+  </v-container>
 </template>
 
 <script>
@@ -145,36 +142,33 @@ export default {
       const addError = (pairIndex, errorType) => this.dictionary.pairs[pairIndex].errors.push(errorType)
 
       this.validationService.findDuplicates(this.dictionary.pairs)
-          .forEach(errorPairIndex => addError(errorPairIndex, "DUPLICATE"));
+        .forEach(errorPairIndex => addError(errorPairIndex, "DUPLICATE"));
 
-      let forks = this.validationService.findForks(this.dictionary.pairs);
-      forks.forEach(forkIndex =>  this.dictionary.pairs[forkIndex].errors.push("FORK"));
-      let chains = this.validationService.findChains(this.dictionary.pairs);
-      chains.forEach(chainIndex => this.dictionary.pairs[chainIndex].errors.push("CHAIN"));
-      let cycles = this.validationService.findCycles(this.dictionary.pairs);
-      cycles.forEach(cycleIndex => this.dictionary.pairs[cycleIndex].errors.push("CYCLE"))
+      this.validationService.findForks(this.dictionary.pairs)
+        .forEach(errorPairIndex => addError(errorPairIndex, "FORK"));
+
+      this.validationService.findChains(this.dictionary.pairs)
+        .forEach(errorPairIndex => addError(errorPairIndex, "CHAIN"));
+
+
+      this.validationService.findCycles(this.dictionary.pairs)
+        .forEach(errorPairIndex => addError(errorPairIndex, "CYCLE"));
     }
   }
 }
 </script>
 
 <style>
-#icon {
-  font-size: 20px;
-  position: relative;
-  left: 10px;
-}
-
 .form {
   margin: 40px auto;
   width: 600px;
 }
 
 .active {
-  color: gray;
+  color: grey;
 }
 
-.inactive {
-  color: rgb(67, 121, 139);
+span {
+  padding-top: 15px
 }
 </style>

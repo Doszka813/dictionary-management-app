@@ -1,6 +1,6 @@
 <template>
-  <v-app dark id="app">
-    <v-toolbar >
+  <v-app light id="app">
+    <v-toolbar dark>
       <v-toolbar-title><router-link to='/'>Dictionary Management</router-link></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items>
@@ -8,7 +8,7 @@
           <router-link to='/dictionaries'>Dictionaries</router-link>
         </v-btn>
         <v-btn flat>
-          <router-link to='/addDictionary'>Add Dictionary <v-icon dark standard>add</v-icon></router-link>
+          <router-link to='/addDictionary'>Add Dictionary</router-link><v-icon dark right>add</v-icon>
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
@@ -20,7 +20,6 @@
   export default {
     name: 'App'
   }
-
 </script>
 
 <style>

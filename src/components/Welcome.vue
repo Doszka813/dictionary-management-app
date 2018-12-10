@@ -1,7 +1,7 @@
 <template>
   <div class="welcome">
     <h1>{{msg}}</h1>
-    <p>You can add a new dictionary or review existing ones</p>
+    <h3>You can add a new dictionary or review <router-link to="/dictionaries">existing ones</router-link>.</h3>
   </div>
 </template>
 

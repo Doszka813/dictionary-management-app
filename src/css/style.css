@@ -12,14 +12,16 @@ table {
 
 tr {
   text-align: left;
+  border-bottom: 1px dotted grey;
+
 }
 
 th {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid black;
 }
 th,
 td {
-  padding: 0 40px;
+  padding:  0 40px 0 0;
   padding-top: 15px;
 }
 
