@@ -24,7 +24,6 @@ export const dictionaryService = ({
   },
   removeById(id) {
     let dictionaries = this.getAll()
-
     const dictionaryIdx = dictionaries.findIndex(dict => dict.id === +id)
     if (dictionaryIdx === -1) {
       return;

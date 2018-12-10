@@ -5,12 +5,12 @@
     </div>
     <div v-if="dictionaries.length>0">
       <h1>{{title}}
-        <v-badge id="counter" color="info" left overlap>
-        <span slot="badge" dark medium>{{dictionaries.length}}</span>
-        <v-icon color="black" large>
+        <v-badge id="counter" color="info" overlap>
+          <span slot="badge" dark medium>{{dictionaries.length}}</span>
+          <v-icon color="black" large>
           library_books
-        </v-icon>
-      </v-badge>
+          </v-icon>
+        </v-badge>
       </h1>
       <v-tabs dark slider-color="blue">
         <v-tab v-for="(dictionary, index) in dictionaries" :key="index" ripple>
@@ -72,6 +72,7 @@ export default {
 <style scoped>
 #counter {
   margin-left: 15px;
+  font-size: 14px;
 }
 
 #card {
